@@ -49,9 +49,9 @@ export function crearReserva(almacen, datos, ahora = new Date()) {
   if (personas > mesa.capacidad) {
     throw new ErrorNegocio(400, `La mesa ${mesa.id} es para máximo ${mesa.capacidad} personas`);
   }
-  // if (estaOcupada(almacen, mesaId, fecha, hora)) {
-  //   throw new ErrorNegocio(409, 'La mesa ya está reservada en esa fecha y hora');
-  // }
+  if (estaOcupada(almacen, mesaId, fecha, hora)) {
+    throw new ErrorNegocio(409, 'La mesa ya está reservada en esa fecha y hora');
+  }
 
   const reserva = {
     id: almacen.siguienteReserva++,
