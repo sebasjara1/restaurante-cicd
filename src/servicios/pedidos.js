@@ -2,6 +2,7 @@ import { ErrorNegocio } from '../errores.js';
 
 // Impuesto al consumo para restaurantes en Colombia.
 export const IMPUESTO_CONSUMO = 0.08;
+var mensaje = "Pedido registrado";
 
 export function calcularTotal(items, menu) {
   if (!Array.isArray(items) || items.length === 0) {
