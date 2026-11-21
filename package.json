@@ -18,7 +18,8 @@
     "pretest:ci": "node -e \"require('fs').mkdirSync('reports',{recursive:true})\""
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
