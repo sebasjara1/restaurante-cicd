@@ -19,7 +19,6 @@ permissions:
 
 env:
   IMAGEN: ghcr.io/${{ github.repository }}
-  REF: ${{ github.event.workflow_run.head_sha || github.sha }}
 
 jobs:
   publicar:
@@ -39,9 +38,9 @@ jobs:
       version: ${{ steps.datos.outputs.version }}
       etiqueta: ${{ steps.datos.outputs.etiqueta }}
     steps:
+      # Sin "ref": se descarga la última versión de main de este repositorio,
+      # nunca el commit que reporta el evento (corrección de alerta de CodeQL).
       - uses: actions/checkout@v7
-        with:
-          ref: ${{ env.REF }}
       - name: Leer versión y commit
         id: datos
         run: |
@@ -81,9 +80,9 @@ jobs:
       # Token de demostración para el entorno de pruebas, no es un secreto real.
       API_TOKEN: token-staging
     steps:
+      # Sin "ref": se descarga la última versión de main de este repositorio,
+      # nunca el commit que reporta el evento (corrección de alerta de CodeQL).
       - uses: actions/checkout@v7
-        with:
-          ref: ${{ env.REF }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -143,5 +142,5 @@ jobs:
             echo "- Versión: ${{ needs.publicar.outputs.version }}"
             echo "- Imagen: \`$IMAGEN:${{ needs.publicar.outputs.etiqueta }}\`"
             echo "- Etiqueta de producción: \`$IMAGEN:produccion\`"
-            echo "- Commit: \`${{ env.REF }}\`"
+            echo "- Commit: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
