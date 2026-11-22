@@ -1,6 +1,9 @@
 FROM node:22-alpine
 
-ENV NODE_ENV=production
+# La versión llega desde el pipeline y se muestra en /health
+ARG APP_VERSION=dev
+ENV NODE_ENV=production \
+    APP_VERSION=$APP_VERSION
 WORKDIR /app
 
 # Primero solo las dependencias, para aprovechar la caché de Docker
