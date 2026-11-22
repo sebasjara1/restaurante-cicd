@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:26-alpine
 
 # La versión llega desde el pipeline y se muestra en /health
 ARG APP_VERSION=dev
