@@ -24,7 +24,13 @@ env:
 jobs:
   publicar:
     name: Publicar imagen en GHCR
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    # Solo despliega si el CI vino de un push a main de este mismo repositorio,
+    # nunca de un pull request ni de un fork (corrección de alerta de CodeQL).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -60,8 +66,8 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.version=${{ steps.datos.outputs.version }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # Sin caché en el CD para evitar envenenamiento de caché.
+          no-cache: true
 
   staging:
     name: Desplegar en staging
@@ -81,7 +87,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-          cache: npm
+          package-manager-cache: false
       - run: npm ci
       - uses: docker/login-action@v4
         with:
