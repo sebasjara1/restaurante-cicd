@@ -25,7 +25,7 @@
     "@eslint/js": "^9.39.0",
     "autocannon": "^9.0.0",
     "eslint": "^9.39.0",
-    "globals": "^16.5.0",
+    "globals": "^17.14.0",
     "supertest": "^7.1.4"
   }
 }
